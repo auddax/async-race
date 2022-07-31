@@ -2,7 +2,7 @@ const path = require('path');
 const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const EslingPlugin = require('eslint-webpack-plugin');
-// const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const baseConfig = {
   entry: './src/index.ts',
@@ -37,7 +37,7 @@ const baseConfig = {
         filename: 'index.html',
     }),
     new EslingPlugin({ extensions: 'ts' }),
-    // new CopyWebpackPlugin({ patterns: [{ from: 'src/resources/img', to: 'img' }] }),
+    new CopyWebpackPlugin({ patterns: [{ from: 'src/resources/img', to: 'img' }] }),
   ],
 };
 
