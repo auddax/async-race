@@ -6,17 +6,22 @@ export interface IApp {
 
 export interface IPage {
   view: View;
-  render: () => void;
+  render: () => string;
 }
 
 export interface IPageHeader {
-  render: () => void;
+  render: () => string;
 }
 
 export interface IPageControls {
-  render: () => void;
+  render: () => string;
 }
 
 export interface IPageContent {
-  render: () => void;
+  render: () => string;
+}
+
+export interface IButton {
+  value: string;
+  render: () => string;
 }

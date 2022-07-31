@@ -10,7 +10,8 @@ class App implements IApp {
   }
 
   start() {
-    this.garage.render();
+    const root = document.getElementById('root');
+    if (root !== null) root.innerHTML = this.garage.render();
   }
 }
 
