@@ -26,8 +26,8 @@ class Page implements IPage {
     return (`
       ${this.header.render()}
       <main>
-      ${this.view === 'GARAGE' ? this.controls.render() : ''}
-      ${this.content.render()}
+        ${this.view === 'GARAGE' ? this.controls.render() : ''}
+        ${this.content.render()}
       </main>
     `);
   }

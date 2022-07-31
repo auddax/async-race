@@ -1,9 +1,16 @@
 import { IPageContent } from '../../types/interfaces';
 
 class PageContent implements IPageContent {
-  // eslint-disable-next-line class-methods-use-this
+  constructor() {
+    this.header = new ContentHeader();
+  }
+
   render() {
-    return '';
+    return (`
+      <section class="content">
+        ${header.render()}
+      </section>
+    `);
   }
 }
 
