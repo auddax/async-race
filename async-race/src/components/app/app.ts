@@ -5,8 +5,11 @@ import { IApp, IPage } from '../../types/interfaces';
 class App implements IApp {
   garage: IPage;
 
+  winners: IPage;
+
   constructor() {
     this.garage = new Page(View.GARAGE);
+    this.winners = new Page(View.WINNERS);
   }
 
   start() {

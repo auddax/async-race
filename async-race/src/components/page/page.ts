@@ -23,10 +23,12 @@ class Page implements IPage {
   }
 
   render() {
-    // ${if (this.view === 'GARAGE') this.controls.render()}
-    // ${this.content.render()}
     return (`
       ${this.header.render()}
+      <main>
+      ${this.view === 'GARAGE' ? this.controls.render() : ''}
+      ${this.content.render()}
+      </main>
     `);
   }
 }

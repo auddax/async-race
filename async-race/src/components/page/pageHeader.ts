@@ -7,8 +7,8 @@ class PageHeader implements IPageHeader {
   buttonWinners: IButton;
 
   constructor() {
-    this.buttonGarage = new Button('Garage', 'header__garage-btn', 'garageButton');
-    this.buttonWinners = new Button('Winners', 'header__winners-btn', 'winnersButton');
+    this.buttonGarage = new Button('Garage', 'button', 'garageButton');
+    this.buttonWinners = new Button('Winners', 'button', 'winnersButton');
   }
 
   render() {
