@@ -21,6 +21,10 @@ export interface IPageControls {
 }
 
 export interface IPageContent {
+  view: View;
+  header: IContentHeader;
+  pagination: IContentPagination;
+  body: IContentBody;
   render: () => string;
 }
 
@@ -30,10 +34,15 @@ export interface IButton {
 }
 
 export interface IContentHeader {
-  headerText: string;
+  type: string;
   render: () => string;
 }
 
 export interface IContentPagination {
+  render: () => string;
+}
+
+export interface IContentBody {
+  type: string;
   render: () => string;
 }
