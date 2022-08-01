@@ -15,7 +15,9 @@ class Button implements IButton {
 
   render() {
     return (`
-      <button class="${this.className}" id="${this.id}">${this.value}</button>
+      <button type="button" class="${this.className}" id="${this.id}">
+        ${this.value}
+      </button>
     `);
   }
 }

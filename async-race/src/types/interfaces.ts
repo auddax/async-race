@@ -2,6 +2,9 @@ import View from './enums';
 
 export interface IApp {
   garage: IPage;
+  winners: IPage;
+  root: HTMLElement;
+  render: (view: View) => void;
 }
 
 export interface IPage {
@@ -23,5 +26,14 @@ export interface IPageContent {
 
 export interface IButton {
   value: string;
+  render: () => string;
+}
+
+export interface IContentHeader {
+  headerText: string;
+  render: () => string;
+}
+
+export interface IContentPagination {
   render: () => string;
 }

@@ -19,16 +19,18 @@ class Page implements IPage {
     this.view = view;
     this.header = new PageHeader();
     this.controls = new PageControls();
-    this.content = new PageContent();
+    this.content = new PageContent(this.view);
   }
 
   render() {
     return (`
-      ${this.header.render()}
-      <main>
-        ${this.view === 'GARAGE' ? this.controls.render() : ''}
-        ${this.content.render()}
-      </main>
+      <div id="${this.view.toLowerCase()}">
+        ${this.header.render()}
+        <main>
+          ${this.view === 'GARAGE' ? this.controls.render() : ''}
+          ${this.content.render()}
+        </main>
+      </div>
     `);
   }
 }

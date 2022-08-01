@@ -1,4 +1,6 @@
-class ContentHeader {
+import { IContentHeader } from '../../types/interfaces';
+
+class ContentHeader implements IContentHeader {
   headerText: string;
 
   constructor(headerText: string) {
@@ -7,9 +9,11 @@ class ContentHeader {
 
   render() {
     return (`
-      <h2>
-        ${this.headerText}
-      </h2>
+      <header class="content__header">
+        <h1>
+          ${this.headerText}
+        </h1>     
+      </header>
     `);
   }
 }

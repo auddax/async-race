@@ -7,14 +7,24 @@ class App implements IApp {
 
   winners: IPage;
 
+  root: HTMLElement;
+
   constructor() {
     this.garage = new Page(View.GARAGE);
     this.winners = new Page(View.WINNERS);
+    this.root = document.getElementById('root') as HTMLElement;
   }
 
-  start() {
-    const root = document.getElementById('root');
-    if (root !== null) root.innerHTML = this.garage.render();
+  listen() {
+    this.root.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (target.id === 'garageButton') this.root.innerHTML = this.garage.render();
+      if (target.id === 'winnersButton') this.root.innerHTML = this.winners.render();
+    });
+  }
+
+  render(view: View) {
+    this.root.innerHTML = this.garage.view === view ? this.garage.render() : this.winners.render();
   }
 }
 
