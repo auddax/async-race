@@ -1,15 +1,20 @@
 import { IContentBody } from '../../types/interfaces';
+import Garage from '../garage/garage';
 
 class ContentBody implements IContentBody {
   type: string;
 
+  garage: Garage;
+
   constructor(type: string) {
     this.type = type;
+    this.garage = new Garage();
   }
 
-  render() {
+  async render() {
     return (`
-      <section class=${this.type === 'GARAGE' ? 'list' : 'table'}>
+      <section class=${this.type}>
+        ${await this.garage.render()}
       </section>
     `);
   }

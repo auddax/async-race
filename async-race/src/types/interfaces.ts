@@ -1,4 +1,4 @@
-import View from './enums';
+import { View } from './enums';
 
 export interface IApp {
   garage: IPage;
@@ -9,7 +9,7 @@ export interface IApp {
 
 export interface IPage {
   view: View;
-  render: () => string;
+  render: () => Promise<string>;
 }
 
 export interface IPageHeader {
@@ -25,7 +25,7 @@ export interface IPageContent {
   header: IContentHeader;
   pagination: IContentPagination;
   body: IContentBody;
-  render: () => string;
+  render: () => Promise<string>;
 }
 
 export interface IButton {
@@ -44,5 +44,25 @@ export interface IContentPagination {
 
 export interface IContentBody {
   type: string;
-  render: () => string;
+  render: () => Promise<string>;
+}
+
+export interface ICar {
+  name: string;
+  color: string;
+  id: number;
+}
+
+export interface IGarage {
+  getCars: () => Promise<{ items: ICar[]; count: string | null; }>;
+  render: () => void;
+}
+
+export interface ILoaderOptions {
+  [index: string]: string | null;
+}
+
+export interface ILoader {
+  base: string;
+  path: string;
 }

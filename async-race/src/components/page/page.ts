@@ -1,7 +1,7 @@
-import View from '../../types/enums';
 import PageHeader from './pageHeader';
 import PageControls from './pageControls';
 import PageContent from './pageContent';
+import { View } from '../../types/enums';
 import {
   IPage, IPageContent, IPageControls, IPageHeader,
 } from '../../types/interfaces';
@@ -22,13 +22,13 @@ class Page implements IPage {
     this.content = new PageContent(this.view);
   }
 
-  render() {
+  async render() {
     return (`
-      <div id="${this.view.toLowerCase()}">
+      <div id="${this.view}">
         ${this.header.render()}
         <main>
-          ${this.view === 'GARAGE' ? this.controls.render() : ''}
-          ${this.content.render()}
+          ${this.view === 'garage' ? this.controls.render() : ''}
+          ${await this.content.render()}
         </main>
       </div>
     `);

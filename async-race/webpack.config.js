@@ -31,6 +31,9 @@ const baseConfig = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
+  experiments: {
+    topLevelAwait: true,
+  },
   plugins: [
     new HtmlWebpackPlugin({
         template: path.resolve(__dirname, './src/index.html'),

@@ -1,4 +1,4 @@
-import View from '../../types/enums';
+import { View } from '../../types/enums';
 import {
   IContentBody, IContentHeader, IContentPagination, IPageContent,
 } from '../../types/interfaces';
@@ -22,12 +22,12 @@ class PageContent implements IPageContent {
     this.body = new ContentBody(this.view);
   }
 
-  render() {
+  async render() {
     return (`
       <section class="content">
         ${this.header.render()}
         ${this.pagination.render()}
-        ${this.body.render()}
+        ${await this.body.render()}
       </section>
     `);
   }

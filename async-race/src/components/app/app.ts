@@ -1,6 +1,6 @@
 import Page from '../page/page';
-import View from '../../types/enums';
 import { IApp, IPage } from '../../types/interfaces';
+import { View } from '../../types/enums';
 
 class App implements IApp {
   garage: IPage;
@@ -16,15 +16,19 @@ class App implements IApp {
   }
 
   listen() {
-    this.root.addEventListener('click', (event) => {
+    this.root.addEventListener('click', async (event) => {
       const target = event.target as HTMLElement;
-      if (target.id === 'garageButton') this.root.innerHTML = this.garage.render();
-      if (target.id === 'winnersButton') this.root.innerHTML = this.winners.render();
+      if (target.id === 'garageButton') this.root.innerHTML = await this.garage.render();
+      if (target.id === 'winnersButton') this.root.innerHTML = await this.winners.render();
     });
   }
 
-  render(view: View) {
-    this.root.innerHTML = this.garage.view === view ? this.garage.render() : this.winners.render();
+  async render(view: View) {
+    if (this.garage.view === view) {
+      this.root.innerHTML = await this.garage.render();
+    } else {
+      this.root.innerHTML = await this.winners.render();
+    }
   }
 }
 

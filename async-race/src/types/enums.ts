@@ -1,6 +1,10 @@
-enum View {
-  GARAGE = 'GARAGE',
-  WINNERS = 'WINNERS',
+export enum View {
+  GARAGE = 'garage',
+  WINNERS = 'winners',
 }
 
-export default View;
+export enum Path {
+  GARAGE = '/garage',
+  ENGINE = '/enginge',
+  WINNERS = '/winners',
+}
