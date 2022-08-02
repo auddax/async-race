@@ -2,20 +2,17 @@ import { IButton, IPageHeader } from '../../types/interfaces';
 import Button from '../button/button';
 
 class PageHeader implements IPageHeader {
-  buttonGarage: IButton;
-
-  buttonWinners: IButton;
+  button: IButton;
 
   constructor() {
-    this.buttonGarage = new Button('Garage', 'button', 'garageButton');
-    this.buttonWinners = new Button('Winners', 'button', 'winnersButton');
+    this.button = new Button('button', 'button');
   }
 
   render() {
     return (`
       <header class="header">
-        ${this.buttonGarage.render()}
-        ${this.buttonWinners.render()}
+        ${this.button.render('Garage', 'garageButton')}
+        ${this.button.render('Winners', 'winnersButton')}
       </header>
     `);
   }

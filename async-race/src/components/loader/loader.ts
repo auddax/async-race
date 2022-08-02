@@ -1,4 +1,4 @@
-import { ICar, ILoader, ILoaderOptions } from '../../types/interfaces';
+import { ILoader, QueryParams } from '../../types/interfaces';
 
 class Loader implements ILoader {
   base: string;
@@ -10,24 +10,24 @@ class Loader implements ILoader {
     this.path = path;
   }
 
-  makeUrl(options?: ILoaderOptions): string {
+  makeUrl(params?: QueryParams): string {
     let url = `${this.base}${this.path}?`;
 
-    if (options) {
-      Object.keys(options).forEach((key) => {
-        url += `${key}=${options[key]}&`;
+    if (params) {
+      Object.keys(params).forEach((key) => {
+        url += `${key}=${params[key]}&`;
       });
     }
 
     return url.slice(0, -1);
   }
 
-  async loader(options?: ILoaderOptions): Promise<{ items: ICar[]; count: string | null; }> {
-    const response = await fetch(this.makeUrl(options));
-    return {
-      items: await response.json(),
-      count: response.headers.get('X-Total-Count'),
-    };
+  async loader(
+    params?: QueryParams,
+    options?: RequestInit,
+  ): Promise<Response> {
+    const response = await fetch(this.makeUrl(params), options);
+    return response;
   }
 }
 

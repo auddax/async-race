@@ -1,22 +1,19 @@
 import { IButton } from '../../types/interfaces';
 
 class Button implements IButton {
-  value: string;
+  type: string;
 
   className: string;
 
-  id: string;
-
-  constructor(value: string, className: string, id: string) {
-    this.value = value;
+  constructor(type: string, className: string) {
+    this.type = type;
     this.className = className;
-    this.id = id;
   }
 
-  render() {
+  render(value: string, id?: string) {
     return (`
-      <button type="button" class="${this.className}" id="${this.id}">
-        ${this.value}
+      <button type="button" class="${this.className}" id="${id || ''}">
+        ${value}
       </button>
     `);
   }

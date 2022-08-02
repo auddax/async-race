@@ -29,8 +29,9 @@ export interface IPageContent {
 }
 
 export interface IButton {
-  value: string;
-  render: () => string;
+  type: string;
+  className: string;
+  render: (value: string, id?: string) => string;
 }
 
 export interface IContentHeader {
@@ -54,12 +55,11 @@ export interface ICar {
 }
 
 export interface IGarage {
-  getCars: () => Promise<{ items: ICar[]; count: string | null; }>;
   render: () => void;
 }
 
-export interface ILoaderOptions {
-  [index: string]: string | null;
+export interface QueryParams {
+  [index: string]: string | number | null;
 }
 
 export interface ILoader {

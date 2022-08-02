@@ -20,6 +20,7 @@ module.exports = {
     ],
     "ignorePatterns": ["*config.js", ".eslintrc.js"],
     "rules": {
+        'no-console': 'off',
         "@typescript-eslint/no-explicit-any": 2,
         "max-lines-per-function": ["error", 40],
     }
