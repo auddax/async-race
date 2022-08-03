@@ -12,19 +12,19 @@ class PageControls implements IPageControls {
     return (`
       <section class="controls">
         <form>
-          <fieldset>
-            <input type="text" id="carName" name="carName">
-            <input type="color" id="carColor" name="carColor">
-            ${this.button.render('Create', 'createButton')}
+          <fieldset id="createCar">
+            <input type="text" id="createCarName" name="createCarName">
+            <input type="color" id="createCarColor" name="createCarColor">
+            ${this.button.render('Create', 'createCarButton')}
           </fieldset>
-          <fieldset>
-            <input type="text" id="carName" name="carName">
-            <input type="color" id="carColor" name="carColor">
-            ${this.button.render('Update', 'updateButton')}
+          <fieldset id="updateCar">
+            <input type="text" id="updateCarName" name="updateCarName">
+            <input type="color" id="updateCarColor" name="updateCarColor">
+            ${this.button.render('Update', 'updateCarButton')}
           </fieldset>
           ${this.button.render('Race', 'raceButton')}
           ${this.button.render('Reset', 'resetButton')}
-          ${this.button.render('Generate Cars', 'generateButton')}
+          ${this.button.render('Generate Cars', 'generateCarsButton')}
         </form>
       </section>
     `);

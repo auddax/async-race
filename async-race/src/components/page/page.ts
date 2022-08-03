@@ -22,13 +22,13 @@ class Page implements IPage {
     this.content = new PageContent(this.view);
   }
 
-  async render() {
+  async render(page: number) {
     return (`
       <div id="${this.view}">
         ${this.header.render()}
         <main>
           ${this.view === 'garage' ? this.controls.render() : ''}
-          ${await this.content.render()}
+          ${await this.content.render(page)}
         </main>
       </div>
     `);

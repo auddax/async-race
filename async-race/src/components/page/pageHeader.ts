@@ -11,8 +11,8 @@ class PageHeader implements IPageHeader {
   render() {
     return (`
       <header class="header">
-        ${this.button.render('Garage', 'garageButton')}
-        ${this.button.render('Winners', 'winnersButton')}
+        ${this.button.render('Garage', 'garagePageButton')}
+        ${this.button.render('Winners', 'winnersPageButton')}
       </header>
     `);
   }

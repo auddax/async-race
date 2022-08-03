@@ -1,15 +1,19 @@
 import { View } from './enums';
 
 export interface IApp {
-  garage: IPage;
-  winners: IPage;
+  garagePage: IPage;
+  winnersPage: IPage;
+  page: number;
   root: HTMLElement;
   render: (view: View) => void;
 }
 
 export interface IPage {
   view: View;
-  render: () => Promise<string>;
+  header: IPageHeader;
+  controls: IPageControls;
+  content: IPageContent;
+  render: (page: number) => Promise<string>;
 }
 
 export interface IPageHeader {
@@ -23,9 +27,8 @@ export interface IPageControls {
 export interface IPageContent {
   view: View;
   header: IContentHeader;
-  pagination: IContentPagination;
   body: IContentBody;
-  render: () => Promise<string>;
+  render: (page: number) => Promise<string>;
 }
 
 export interface IButton {
@@ -36,16 +39,18 @@ export interface IButton {
 
 export interface IContentHeader {
   type: string;
-  render: () => string;
+  render: (carsCount: string, page: number) => string;
 }
 
-export interface IContentPagination {
+export interface IContentFooter {
+  button: IButton;
   render: () => string;
 }
 
 export interface IContentBody {
   type: string;
-  render: () => Promise<string>;
+  garage: IGarage;
+  render: (page: number) => Promise<string>;
 }
 
 export interface ICar {
@@ -55,14 +60,27 @@ export interface ICar {
 }
 
 export interface IGarage {
-  render: () => void;
+  getCars: (page?: number, limit?: number) => Promise<{
+    items: Promise<Response>;
+    count: string | null;
+  }>;
+  createCar: (name: string, color: string) => Promise<Response>;
+  updateCar: (id: number, name: string, color: string) => Promise<Response>;
+  deleteCar: (id: number) => Promise<Response>;
+  render: (page?: number) => void;
 }
 
 export interface QueryParams {
   [index: string]: string | number | null;
 }
 
+export interface PathVars {
+  [index: string]: string | number | null;
+}
+
 export interface ILoader {
   base: string;
   path: string;
+  makeUrl: (vars?: number, params?: QueryParams) => string;
+  loader: (vars?: number, params?: QueryParams, options?: RequestInit) => Promise<Response>;
 }
