@@ -10,10 +10,13 @@ export interface IApp {
 
 export interface IPage {
   view: View;
+  page: number;
+  root: HTMLElement;
   header: IPageHeader;
   controls: IPageControls;
   content: IPageContent;
-  render: (page: number) => Promise<string>;
+  listen: () => void;
+  render: () => Promise<void>;
 }
 
 export interface IPageHeader {

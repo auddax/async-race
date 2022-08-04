@@ -31,13 +31,11 @@ class Garage extends Loader implements IGarage {
   async createCar(name: string, color: string) {
     const requestHeaders = new Headers();
     requestHeaders.append('Content-Type', 'application/json');
-
     const requestOptions = {
       method: 'POST',
       headers: requestHeaders,
       body: JSON.stringify({ name, color }),
     };
-
     const response = await super.loader(undefined, {}, requestOptions);
     return response;
   }
@@ -45,13 +43,11 @@ class Garage extends Loader implements IGarage {
   async updateCar(id: number, name: string, color: string) {
     const requestHeaders = new Headers();
     requestHeaders.append('Content-Type', 'application/json');
-
     const requestOptions = {
       method: 'PUT',
       headers: requestHeaders,
       body: JSON.stringify({ name, color }),
     };
-
     const response = await super.loader(id, {}, requestOptions);
     return response;
   }
@@ -60,7 +56,6 @@ class Garage extends Loader implements IGarage {
     const requestOptions = {
       method: 'DELETE',
     };
-
     const response = await super.loader(id, {}, requestOptions);
     return response;
   }
