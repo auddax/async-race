@@ -33,42 +33,62 @@ class Page implements IPage {
   listen(): void {
     this.root.addEventListener('click', async (event) => {
       const target = event.target as HTMLElement;
-      if (target.id === 'createCarButton') {
-        const carName = document.getElementById('createCarName') as HTMLInputElement;
-        const carColor = document.getElementById('createCarColor') as HTMLInputElement;
-        await this.content.body.garage.createCar(carName.value, carColor.value);
-        await this.render();
-      }
-      if (target.id === 'deleteCarButton') {
-        const carId = target.parentElement?.parentElement?.id;
-        if (carId) await this.content.body.garage.deleteCar(Number(carId));
-        await this.render();
-      }
-      if (target.id === 'generateCarsButton') {
-        for (let i = 0; i < 100; i += 1) {
-          const carName = generateRandomCarName(environment.carBrands, environment.carModels);
-          const carColor = generateRandomColor();
-          this.content.body.garage.createCar(carName, carColor);
-        }
-        await this.render();
-      }
-      if (target.id === 'updateCarButton') {
-        const targetCar = document.querySelector('input[name="car"]:checked') as HTMLInputElement;
-        const carId = targetCar.parentElement?.parentElement?.id;
-        const carName = document.getElementById('updateCarName') as HTMLInputElement;
-        const carColor = document.getElementById('updateCarColor') as HTMLInputElement;
-        await this.content.body.garage.updateCar(Number(carId), carName.value, carColor.value);
-        await this.render();
-      }
-      if (target.id === 'nextPageButton') {
-        const carCount = (await this.content.body.garage.getCars()).count;
-        const pageMax = Math.ceil(Number(carCount) / 7);
-        if (this.page + 1 <= pageMax) this.page += 1; await this.render();
-      }
-      if (target.id === 'prevPageButton') {
-        if (this.page - 1 > 0) this.page -= 1; await this.render();
-      }
+      this.createCar(target);
+      this.deleteCar(target);
+      this.generateCars(target);
+      this.updateCar(target);
+      this.nextPage(target);
+      this.prevPage(target);
     });
+  }
+
+  async createCar(target: HTMLElement) {
+    if (target.id !== 'createCarButton') return;
+    const carName = document.getElementById('createCarName') as HTMLInputElement;
+    const carColor = document.getElementById('createCarColor') as HTMLInputElement;
+    await this.content.body.garage.createCar(carName.value, carColor.value);
+    await this.render();
+  }
+
+  async deleteCar(target: HTMLElement) {
+    if (target.id !== 'deleteCarButton') return;
+    const carId = target.parentElement?.parentElement?.id;
+    if (carId) await this.content.body.garage.deleteCar(Number(carId));
+    await this.render();
+  }
+
+  async generateCars(target: HTMLElement) {
+    if (target.id !== 'generateCarsButton') return;
+    for (let i = 0; i < 100; i += 1) {
+      const carName = generateRandomCarName(environment.carBrands, environment.carModels);
+      const carColor = generateRandomColor();
+      this.content.body.garage.createCar(carName, carColor);
+    }
+    await this.render();
+  }
+
+  async updateCar(target: HTMLElement) {
+    if (target.id !== 'updateCarButton') return;
+    const targetCar = document.querySelector('input[name="car"]:checked') as HTMLInputElement;
+    const carId = targetCar.parentElement?.parentElement?.id;
+    const carName = document.getElementById('updateCarName') as HTMLInputElement;
+    const carColor = document.getElementById('updateCarColor') as HTMLInputElement;
+    await this.content.body.garage.updateCar(Number(carId), carName.value, carColor.value);
+    await this.render();
+  }
+
+  async nextPage(target: HTMLElement) {
+    if (target.id !== 'nextPageButton') return;
+    const carCount = (await this.content.body.garage.getCars()).count;
+    const pageMax = Math.ceil(Number(carCount) / 7);
+    if (this.page + 1 <= pageMax) this.page += 1;
+    await this.render();
+  }
+
+  async prevPage(target: HTMLElement) {
+    if (target.id !== 'prevPageButton') return;
+    if (this.page - 1 > 0) this.page -= 1;
+    await this.render();
   }
 
   async render(): Promise<void> {
