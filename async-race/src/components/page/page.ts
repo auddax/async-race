@@ -40,7 +40,7 @@ class Page implements IPage {
         await this.render();
       }
       if (target.id === 'deleteCarButton') {
-        const carId = target.parentElement?.id;
+        const carId = target.parentElement?.parentElement?.id;
         if (carId) await this.content.body.garage.deleteCar(Number(carId));
         await this.render();
       }
@@ -54,7 +54,7 @@ class Page implements IPage {
       }
       if (target.id === 'updateCarButton') {
         const targetCar = document.querySelector('input[name="car"]:checked') as HTMLInputElement;
-        const carId = targetCar.parentElement?.id;
+        const carId = targetCar.parentElement?.parentElement?.id;
         const carName = document.getElementById('updateCarName') as HTMLInputElement;
         const carColor = document.getElementById('updateCarColor') as HTMLInputElement;
         await this.content.body.garage.updateCar(Number(carId), carName.value, carColor.value);
@@ -75,7 +75,7 @@ class Page implements IPage {
     this.root.innerHTML = `
       <div id="${this.view}">
         ${this.header.render()}
-        <main>
+        <main class="container">
           ${this.view === 'garage' ? this.controls.render() : ''}
           ${await this.content.render(this.page)}
         </main>

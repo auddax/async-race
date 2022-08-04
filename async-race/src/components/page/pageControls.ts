@@ -11,20 +11,22 @@ class PageControls implements IPageControls {
   render() {
     return (`
       <section class="controls">
-        <form>
-          <fieldset id="createCar">
-            <input type="text" id="createCarName" name="createCarName">
-            <input type="color" id="createCarColor" name="createCarColor">
+        <form class="controls__form">
+          <fieldset class="controls__input-group" id="createCar">
+            <input type="text" class="controls__input" id="createCarName" name="createCarName">
+            <input type="color" class="controls__input" id="createCarColor" name="createCarColor">
             ${this.button.render('Create', 'createCarButton')}
           </fieldset>
-          <fieldset id="updateCar">
-            <input type="text" id="updateCarName" name="updateCarName">
-            <input type="color" id="updateCarColor" name="updateCarColor">
+          <fieldset class="controls__input-group" id="updateCar">
+            <input type="text" class="controls__input" id="updateCarName" name="updateCarName">
+            <input type="color" class="controls__input" id="updateCarColor" name="updateCarColor">
             ${this.button.render('Update', 'updateCarButton')}
           </fieldset>
-          ${this.button.render('Race', 'raceButton')}
-          ${this.button.render('Reset', 'resetButton')}
-          ${this.button.render('Generate Cars', 'generateCarsButton')}
+          <fieldset class="controls__input-group">
+            ${this.button.render('Race', 'raceButton')}
+            ${this.button.render('Reset', 'resetButton')}
+            ${this.button.render('Generate Cars', 'generateCarsButton')}
+          </fieldset>
         </form>
       </section>
     `);

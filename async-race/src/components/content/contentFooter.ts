@@ -10,7 +10,7 @@ class ContentFooter implements IContentFooter {
 
   render() {
     return (`
-      <footer>
+      <footer class="content-footer">
         ${this.button.render('Previous', 'prevPageButton')}
         ${this.button.render('Next', 'nextPageButton')}
       </footer>
