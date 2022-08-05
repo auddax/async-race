@@ -20,7 +20,7 @@ class Loader implements ILoader {
     return url.slice(0, -1);
   }
 
-  async loader(vars?: number, params?: QueryParams, options?: RequestInit): Promise<Response> {
+  async getResponse(vars?: number, params?: QueryParams, options?: RequestInit): Promise<Response> {
     const response = await fetch(this.makeUrl(vars, params), options);
     return response;
   }

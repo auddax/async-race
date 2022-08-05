@@ -1,4 +1,4 @@
-import { View } from './enums';
+import { EngineStatus, View } from './enums';
 
 export interface IApp {
   garagePage: IPage;
@@ -73,6 +73,10 @@ export interface IGarage {
   render: (page?: number) => void;
 }
 
+export interface IEngine {
+  controlCarEngine: (id: number, status: EngineStatus) => Promise<Response>;
+}
+
 export interface QueryParams {
   [index: string]: string | number | null;
 }
@@ -85,5 +89,5 @@ export interface ILoader {
   base: string;
   path: string;
   makeUrl: (vars?: number, params?: QueryParams) => string;
-  loader: (vars?: number, params?: QueryParams, options?: RequestInit) => Promise<Response>;
+  getResponse: (vars?: number, params?: QueryParams, options?: RequestInit) => Promise<Response>;
 }

@@ -5,6 +5,12 @@ export enum View {
 
 export enum Path {
   GARAGE = '/garage',
-  ENGINE = '/enginge',
+  ENGINE = '/engine',
   WINNERS = '/winners',
+}
+
+export enum EngineStatus {
+  STARTED = 'started',
+  STOPPED = 'stopped',
+  DRIVE = 'drive',
 }

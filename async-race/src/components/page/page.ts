@@ -1,12 +1,14 @@
 import PageHeader from './pageHeader';
 import PageControls from './pageControls';
 import PageContent from './pageContent';
-import { View } from '../../types/enums';
+import { EngineStatus, View } from '../../types/enums';
 import {
+  IEngine,
   IPage, IPageContent, IPageControls, IPageHeader,
 } from '../../types/interfaces';
 import { generateRandomCarName, generateRandomColor } from '../../utils/utils';
 import environment from '../../environment/environment';
+import Engine from '../garage/engine';
 
 class Page implements IPage {
   view: View;
@@ -14,6 +16,8 @@ class Page implements IPage {
   page: number;
 
   root: HTMLElement;
+
+  engine: IEngine;
 
   header: IPageHeader;
 
@@ -25,6 +29,7 @@ class Page implements IPage {
     this.view = view;
     this.page = page;
     this.root = root;
+    this.engine = new Engine();
     this.header = new PageHeader();
     this.controls = new PageControls();
     this.content = new PageContent(this.view);
@@ -39,6 +44,7 @@ class Page implements IPage {
       this.updateCar(target);
       this.nextPage(target);
       this.prevPage(target);
+      this.driveCar(target);
     });
   }
 
@@ -75,6 +81,17 @@ class Page implements IPage {
     const carColor = document.getElementById('updateCarColor') as HTMLInputElement;
     await this.content.body.garage.updateCar(Number(carId), carName.value, carColor.value);
     await this.render();
+  }
+
+  async driveCar(target: HTMLElement) {
+    if (!target.id.includes('driveCar')) return;
+    const carId = target.parentElement?.parentElement?.id;
+    const car = target.parentElement?.querySelector('svg');
+    if (!car) return;
+    const response = await this.engine.controlCarEngine(Number(carId), EngineStatus.STARTED);
+    const { velocity, distance } = await response.json();
+    const time = distance / velocity;
+    console.log(time);
   }
 
   async nextPage(target: HTMLElement) {
