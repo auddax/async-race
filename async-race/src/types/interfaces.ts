@@ -15,6 +15,7 @@ export interface IPage {
   header: IPageHeader;
   controls: IPageControls;
   content: IPageContent;
+  driveRequest: IDriveRequest;
   listen: () => void;
   render: () => Promise<void>;
 }
@@ -32,6 +33,10 @@ export interface IPageContent {
   header: IContentHeader;
   body: IContentBody;
   render: (page: number) => Promise<string>;
+}
+
+export interface IDriveRequest {
+  [index: string]: number;
 }
 
 export interface IButton {

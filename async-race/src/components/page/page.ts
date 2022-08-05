@@ -3,10 +3,11 @@ import PageControls from './pageControls';
 import PageContent from './pageContent';
 import { EngineStatus, View } from '../../types/enums';
 import {
+  IDriveRequest,
   IEngine,
   IPage, IPageContent, IPageControls, IPageHeader,
 } from '../../types/interfaces';
-import { generateRandomCarName, generateRandomColor } from '../../utils/utils';
+import { startAnimation, generateRandomCarName, generateRandomColor } from '../../utils/utils';
 import environment from '../../environment/environment';
 import Engine from '../garage/engine';
 
@@ -25,6 +26,8 @@ class Page implements IPage {
 
   content: IPageContent;
 
+  driveRequest: IDriveRequest;
+
   constructor(view: View, page: number, root: HTMLElement) {
     this.view = view;
     this.page = page;
@@ -33,6 +36,7 @@ class Page implements IPage {
     this.header = new PageHeader();
     this.controls = new PageControls();
     this.content = new PageContent(this.view);
+    this.driveRequest = {};
   }
 
   listen(): void {
@@ -45,6 +49,7 @@ class Page implements IPage {
       this.nextPage(target);
       this.prevPage(target);
       this.driveCar(target);
+      this.stopCar(target);
     });
   }
 
@@ -87,11 +92,31 @@ class Page implements IPage {
     if (!target.id.includes('driveCar')) return;
     const carId = target.parentElement?.parentElement?.id;
     const car = target.parentElement?.querySelector('svg');
-    if (!car) return;
-    const response = await this.engine.controlCarEngine(Number(carId), EngineStatus.STARTED);
-    const { velocity, distance } = await response.json();
-    const time = distance / velocity;
-    console.log(time);
+    if (!car || !carId) return;
+    const responseEngine = await this.engine.controlCarEngine(Number(carId), EngineStatus.STARTED);
+    const { velocity, distance } = await responseEngine.json();
+    const duration = distance / velocity;
+    startAnimation(
+      car,
+      duration,
+      carId,
+      this.driveRequest,
+      (time) => 0.5 * (1 - Math.cos(Math.PI * time)),
+    );
+    const responseDrive = await this.engine.controlCarEngine(Number(carId), EngineStatus.DRIVE);
+    if (responseDrive.status === 500) {
+      await this.engine.controlCarEngine(Number(carId), EngineStatus.STOPPED);
+      cancelAnimationFrame(this.driveRequest[carId]);
+    }
+  }
+
+  async stopCar(target: HTMLElement) {
+    if (!target.id.includes('stopCar')) return;
+    const carId = target.parentElement?.parentElement?.id;
+    const car = target.parentElement?.querySelector('svg');
+    if (!car || !carId || !Object.keys(this.driveRequest).includes(carId)) return;
+    await this.engine.controlCarEngine(Number(carId), EngineStatus.STOPPED);
+    cancelAnimationFrame(this.driveRequest[carId]);
   }
 
   async nextPage(target: HTMLElement) {
