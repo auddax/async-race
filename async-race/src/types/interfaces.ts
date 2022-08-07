@@ -1,17 +1,23 @@
 import { EngineStatus, View } from './enums';
 
 export interface IApp {
+  root: HTMLElement;
+  page: number;
+  winners: IWinners;
   garagePage: IPage;
   winnersPage: IPage;
-  page: number;
-  root: HTMLElement;
   render: (view: View) => void;
+}
+
+export interface IWinners {
+  [index: string]: number;
 }
 
 export interface IPage {
   view: View;
   page: number;
   root: HTMLElement;
+  winners: IWinners;
   header: IPageHeader;
   controls: IPageControls;
   content: IPageContent;
@@ -67,11 +73,13 @@ export interface ICar {
   id: number;
 }
 
+export interface IGetCars {
+  items: Promise<ICar[]>;
+  count: string | null;
+}
+
 export interface IGarage {
-  getCars: (page?: number, limit?: number) => Promise<{
-    items: Promise<Response>;
-    count: string | null;
-  }>;
+  getCars: (page?: number, limit?: number) => Promise<IGetCars>;
   createCar: (name: string, color: string) => Promise<Response>;
   updateCar: (id: number, name: string, color: string) => Promise<Response>;
   deleteCar: (id: number) => Promise<Response>;

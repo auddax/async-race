@@ -5,9 +5,18 @@ import { EngineStatus, View } from '../../types/enums';
 import {
   IDriveRequest,
   IEngine,
-  IPage, IPageContent, IPageControls, IPageHeader,
+  IPage,
+  IPageContent,
+  IPageControls,
+  IPageHeader,
+  IWinners,
 } from '../../types/interfaces';
-import { startAnimation, generateRandomCarName, generateRandomColor } from '../../utils/utils';
+import {
+  startAnimation,
+  generateRandomCarName,
+  generateRandomColor,
+  showPopup,
+} from '../../utils/utils';
 import environment from '../../environment/environment';
 import Engine from '../garage/engine';
 
@@ -17,6 +26,8 @@ class Page implements IPage {
   page: number;
 
   root: HTMLElement;
+
+  winners: IWinners;
 
   engine: IEngine;
 
@@ -28,10 +39,11 @@ class Page implements IPage {
 
   driveRequest: IDriveRequest;
 
-  constructor(view: View, page: number, root: HTMLElement) {
+  constructor(view: View, page: number, root: HTMLElement, winners: IWinners) {
     this.view = view;
     this.page = page;
     this.root = root;
+    this.winners = winners;
     this.engine = new Engine();
     this.header = new PageHeader();
     this.controls = new PageControls();
@@ -51,6 +63,7 @@ class Page implements IPage {
       this.driveCar(target);
       this.stopCar(target);
       this.raceCars(target);
+      this.resetCars(target);
     });
   }
 
@@ -89,6 +102,27 @@ class Page implements IPage {
     await this.render();
   }
 
+  async raceCars(target: HTMLElement): Promise<IWinners | string | null> {
+    if (!target.id.includes('raceCarsButton')) return null;
+    const garage = document.querySelectorAll('.car');
+    try {
+      const winnerCar = await Promise.any(Array.from(garage).map((item) => {
+        const car = item.querySelector('svg');
+        const carId = item.id;
+        return (car && carId) ? this.startEngine(car, carId) : null;
+      }));
+      // TODO: Refactor this line
+      if (winnerCar) {
+        Object.assign(this.winners, winnerCar);
+        showPopup(winnerCar);
+      }
+      return winnerCar;
+    } catch (error) {
+      // TODO: Handle this error
+      return error instanceof Error ? error.message : String(error);
+    }
+  }
+
   async driveCar(target: Element): Promise<void> {
     if (!target.id.includes('driveCar')) return;
     const carId = target.parentElement?.parentElement?.id;
@@ -106,7 +140,7 @@ class Page implements IPage {
     cancelAnimationFrame(this.driveRequest[carId]);
   }
 
-  async startEngine(car: HTMLElement | SVGSVGElement, carId: string): Promise<string> {
+  async startEngine(car: HTMLElement | SVGSVGElement, carId: string): Promise<IWinners> {
     const responseEngine = await this.engine.controlCarEngine(Number(carId), EngineStatus.STARTED);
     const carElement = document.getElementById(String(carId))?.querySelector('.car__name') as HTMLElement;
     const carName = carElement.innerText;
@@ -125,23 +159,13 @@ class Page implements IPage {
       cancelAnimationFrame(this.driveRequest[carId]);
       throw new Error('Engine was broken down!');
     }
-    return carName;
+    return { [carName]: duration };
   }
 
-  async raceCars(target: HTMLElement): Promise<string | null> {
-    if (!target.id.includes('raceCarsButton')) return null;
-    const garage = document.querySelectorAll('.car');
-    try {
-      const winnerCar = await Promise.any(Array.from(garage).map((item) => {
-        const car = item.querySelector('svg');
-        const carId = item.id;
-        return (car && carId) ? this.startEngine(car, carId) : null;
-      }));
-      console.log(winnerCar);
-      return winnerCar;
-    } catch (error) {
-      return error instanceof Error ? error.message : String(error);
-    }
+  async resetCars(target: HTMLElement): Promise<void> {
+    if (target.id !== 'resetCarsButton') return;
+    this.driveRequest = {};
+    await this.render();
   }
 
   async nextPage(target: HTMLElement): Promise<void> {

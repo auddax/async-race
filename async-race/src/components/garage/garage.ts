@@ -1,4 +1,6 @@
-import { IButton, ICar, IGarage } from '../../types/interfaces';
+import {
+  IButton, ICar, IGarage, IGetCars,
+} from '../../types/interfaces';
 import { Path } from '../../types/enums';
 import Loader from '../loader/loader';
 import environment from '../../environment/environment';
@@ -15,7 +17,8 @@ class Garage extends Loader implements IGarage {
     this.buttonEngine = new Button('button', 'button-engine');
   }
 
-  async getCars(page = 1, limit = 7) {
+  async getCars(page = 1, limit = 7): Promise<IGetCars> {
+    // Have no idea how to deal with this 'undefined' argument
     const response = await super.getResponse(undefined, { _page: page, _limit: limit });
     return {
       items: response.json(),
@@ -23,12 +26,12 @@ class Garage extends Loader implements IGarage {
     };
   }
 
-  async getCar(id: number) {
+  async getCar(id: number): Promise<Response> {
     const response = await super.getResponse(id);
     return response;
   }
 
-  async createCar(name: string, color: string) {
+  async createCar(name: string, color: string): Promise<Response> {
     const requestHeaders = new Headers();
     requestHeaders.append('Content-Type', 'application/json');
     const requestOptions = {
@@ -40,7 +43,7 @@ class Garage extends Loader implements IGarage {
     return response;
   }
 
-  async updateCar(id: number, name: string, color: string) {
+  async updateCar(id: number, name: string, color: string): Promise<Response> {
     const requestHeaders = new Headers();
     requestHeaders.append('Content-Type', 'application/json');
     const requestOptions = {
@@ -52,7 +55,7 @@ class Garage extends Loader implements IGarage {
     return response;
   }
 
-  async deleteCar(id: number) {
+  async deleteCar(id: number): Promise<Response> {
     const requestOptions = {
       method: 'DELETE',
     };
