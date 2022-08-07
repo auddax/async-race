@@ -23,8 +23,8 @@ class PageControls implements IPageControls {
             ${this.button.render('Update', 'updateCarButton')}
           </fieldset>
           <fieldset class="controls__input-group">
-            ${this.button.render('Race', 'raceButton')}
-            ${this.button.render('Reset', 'resetButton')}
+            ${this.button.render('Race', 'raceCarsButton')}
+            ${this.button.render('Reset', 'resetCarsButton')}
             ${this.button.render('Generate Cars', 'generateCarsButton')}
           </fieldset>
         </form>

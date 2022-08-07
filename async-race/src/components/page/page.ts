@@ -50,10 +50,11 @@ class Page implements IPage {
       this.prevPage(target);
       this.driveCar(target);
       this.stopCar(target);
+      this.raceCars(target);
     });
   }
 
-  async createCar(target: HTMLElement) {
+  async createCar(target: HTMLElement): Promise<void> {
     if (target.id !== 'createCarButton') return;
     const carName = document.getElementById('createCarName') as HTMLInputElement;
     const carColor = document.getElementById('createCarColor') as HTMLInputElement;
@@ -61,14 +62,14 @@ class Page implements IPage {
     await this.render();
   }
 
-  async deleteCar(target: HTMLElement) {
+  async deleteCar(target: HTMLElement): Promise<void> {
     if (target.id !== 'deleteCarButton') return;
     const carId = target.parentElement?.parentElement?.id;
     if (carId) await this.content.body.garage.deleteCar(Number(carId));
     await this.render();
   }
 
-  async generateCars(target: HTMLElement) {
+  async generateCars(target: HTMLElement): Promise<void> {
     if (target.id !== 'generateCarsButton') return;
     for (let i = 0; i < 100; i += 1) {
       const carName = generateRandomCarName(environment.carBrands, environment.carModels);
@@ -78,7 +79,7 @@ class Page implements IPage {
     await this.render();
   }
 
-  async updateCar(target: HTMLElement) {
+  async updateCar(target: HTMLElement): Promise<void> {
     if (target.id !== 'updateCarButton') return;
     const targetCar = document.querySelector('input[name="car"]:checked') as HTMLInputElement;
     const carId = targetCar.parentElement?.parentElement?.id;
@@ -88,12 +89,27 @@ class Page implements IPage {
     await this.render();
   }
 
-  async driveCar(target: HTMLElement) {
+  async driveCar(target: Element): Promise<void> {
     if (!target.id.includes('driveCar')) return;
     const carId = target.parentElement?.parentElement?.id;
     const car = target.parentElement?.querySelector('svg');
     if (!car || !carId) return;
+    await this.startEngine(car, carId);
+  }
+
+  async stopCar(target: HTMLElement): Promise<void> {
+    if (!target.id.includes('stopCar')) return;
+    const carId = target.parentElement?.parentElement?.id;
+    const car = target.parentElement?.querySelector('svg');
+    if (!car || !carId || !Object.keys(this.driveRequest).includes(carId)) return;
+    await this.engine.controlCarEngine(Number(carId), EngineStatus.STOPPED);
+    cancelAnimationFrame(this.driveRequest[carId]);
+  }
+
+  async startEngine(car: HTMLElement | SVGSVGElement, carId: string): Promise<string> {
     const responseEngine = await this.engine.controlCarEngine(Number(carId), EngineStatus.STARTED);
+    const carElement = document.getElementById(String(carId))?.querySelector('.car__name') as HTMLElement;
+    const carName = carElement.innerText;
     const { velocity, distance } = await responseEngine.json();
     const duration = distance / velocity;
     startAnimation(
@@ -107,19 +123,28 @@ class Page implements IPage {
     if (responseDrive.status === 500) {
       await this.engine.controlCarEngine(Number(carId), EngineStatus.STOPPED);
       cancelAnimationFrame(this.driveRequest[carId]);
+      throw new Error('Engine was broken down!');
+    }
+    return carName;
+  }
+
+  async raceCars(target: HTMLElement): Promise<string | null> {
+    if (!target.id.includes('raceCarsButton')) return null;
+    const garage = document.querySelectorAll('.car');
+    try {
+      const winnerCar = await Promise.any(Array.from(garage).map((item) => {
+        const car = item.querySelector('svg');
+        const carId = item.id;
+        return (car && carId) ? this.startEngine(car, carId) : null;
+      }));
+      console.log(winnerCar);
+      return winnerCar;
+    } catch (error) {
+      return error instanceof Error ? error.message : String(error);
     }
   }
 
-  async stopCar(target: HTMLElement) {
-    if (!target.id.includes('stopCar')) return;
-    const carId = target.parentElement?.parentElement?.id;
-    const car = target.parentElement?.querySelector('svg');
-    if (!car || !carId || !Object.keys(this.driveRequest).includes(carId)) return;
-    await this.engine.controlCarEngine(Number(carId), EngineStatus.STOPPED);
-    cancelAnimationFrame(this.driveRequest[carId]);
-  }
-
-  async nextPage(target: HTMLElement) {
+  async nextPage(target: HTMLElement): Promise<void> {
     if (target.id !== 'nextPageButton') return;
     const carCount = (await this.content.body.garage.getCars()).count;
     const pageMax = Math.ceil(Number(carCount) / 7);
@@ -127,7 +152,7 @@ class Page implements IPage {
     await this.render();
   }
 
-  async prevPage(target: HTMLElement) {
+  async prevPage(target: HTMLElement): Promise<void> {
     if (target.id !== 'prevPageButton') return;
     if (this.page - 1 > 0) this.page -= 1;
     await this.render();
