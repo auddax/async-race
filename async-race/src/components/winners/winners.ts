@@ -98,7 +98,7 @@ class Winners extends Loader implements IWinners {
     return response;
   }
 
-  async render(page?: number, sort?: SortType, order?: SortOrder) {
+  async render(page?: number, sort?: SortType, order?: SortOrder): Promise<string> {
     const content = ((await (await this.getWinners(page, sort, order)).items).map((item: ICar, index) => `
       <tr>
         <td>${(((page || 1) - 1) * environment.pageLimit.winners) + index + 1}</td>

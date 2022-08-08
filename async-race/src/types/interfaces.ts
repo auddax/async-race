@@ -107,18 +107,14 @@ export interface IGarage {
 export interface IEngine {
   controlCarEngine: (id: number, status: EngineStatus) => Promise<Response>;
 }
-// TODO: join QueryParams and PathVars types
-export interface QueryParams {
-  [index: string]: string | number | null;
-}
 
-export interface PathVars {
+export interface RequestParams {
   [index: string]: string | number | null;
 }
 
 export interface ILoader {
   base: string;
   path: string;
-  makeUrl: (vars?: number, params?: QueryParams) => string;
-  getResponse: (vars?: number, params?: QueryParams, options?: RequestInit) => Promise<Response>;
+  makeUrl: (vars?: number, params?: RequestParams) => string;
+  getResponse: (vars?: number, params?: RequestParams, options?: RequestInit) => Promise<Response>;
 }

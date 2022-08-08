@@ -1,4 +1,7 @@
-import { SortOrder, SortType } from '../../types/enums';
+import {
+  SortOrder,
+  SortType,
+} from '../../types/enums';
 import {
   IContentBody,
   IGarage,

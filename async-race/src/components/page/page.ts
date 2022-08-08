@@ -73,7 +73,7 @@ class Page implements IPage {
       this.raceCars(target);
       this.resetCars(target);
       this.sortCars(target);
-      checkRadioButton(target);
+      checkRadioButton(event);
     });
   }
 
@@ -125,14 +125,12 @@ class Page implements IPage {
         const carId = item.id;
         return (car && carId) ? this.startEngine(car, carId) : null;
       }));
-      // TODO: Refactor this line
       if (winnerCar) {
         await this.content.body.winners.createWinner(winnerCar);
         showPopup(winnerCar);
       }
       return winnerCar;
     } catch (error) {
-      // TODO: Handle this error
       return error instanceof Error ? error.message : String(error);
     }
   }
@@ -218,7 +216,9 @@ class Page implements IPage {
 
   async prevPage(target: HTMLElement): Promise<void> {
     if (target.id !== 'prevPageButton') return;
+    if (target.classList.contains('disabled')) return;
     if (this.page - 1 > 0) this.page -= 1;
+    if (this.page === 1) target.classList.add('disabled');
     await this.render();
   }
 

@@ -1,6 +1,6 @@
+/* eslint-disable no-param-reassign */
 import { ICar, IDriveRequest } from '../types/interfaces';
 
-/* eslint-disable no-param-reassign */
 export const generateRandomColor = ():string => {
   const letters = '0123456789ABCDEF';
   let color = '#';
@@ -26,7 +26,6 @@ export const startAnimation = (
 ): void => {
   let start: null | number = null;
   const { right } = element.getBoundingClientRect();
-  // TODO: remove magic number (40)
   const distance = document.documentElement.clientWidth - (right + 40);
   requestId[elementId] = requestAnimationFrame(function animate(timestamp) {
     if (!start) start = timestamp;
@@ -69,8 +68,11 @@ export const showPopup = (winnerCar: ICar): void => {
   popup?.addEventListener('click', closePopup);
 };
 
-export const checkRadioButton = (target: HTMLElement) => {
+export const checkRadioButton = (event: Event): void => {
+  event.preventDefault();
+  const target = event.target as HTMLElement;
   if (!target.classList.contains('button-radio')) return;
-  const radioInput = target?.parentElement?.querySelector('.car__radio') as HTMLInputElement;
+  const carElement = target?.closest('.car') as HTMLInputElement;
+  const radioInput = carElement.querySelector('.car__radio') as HTMLInputElement;
   if (radioInput) radioInput.checked = !radioInput.checked;
 };

@@ -1,4 +1,4 @@
-import { ILoader, QueryParams } from '../../types/interfaces';
+import { ILoader, RequestParams } from '../../types/interfaces';
 
 class Loader implements ILoader {
   base: string;
@@ -10,7 +10,7 @@ class Loader implements ILoader {
     this.path = path;
   }
 
-  makeUrl(vars?: number, params?: QueryParams): string {
+  makeUrl(vars?: number, params?: RequestParams): string {
     let url = vars ? `${this.base}${this.path}/${String(vars)}?` : `${this.base}${this.path}?`;
     if (params) {
       Object.keys(params).forEach((key) => {
@@ -20,7 +20,11 @@ class Loader implements ILoader {
     return url.slice(0, -1);
   }
 
-  async getResponse(vars?: number, params?: QueryParams, options?: RequestInit): Promise<Response> {
+  async getResponse(
+    vars?: number,
+    params?: RequestParams,
+    options?: RequestInit,
+  ): Promise<Response> {
     const response = await fetch(this.makeUrl(vars, params), options);
     return response;
   }
