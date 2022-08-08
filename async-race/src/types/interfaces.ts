@@ -73,6 +73,7 @@ export interface IGetCars {
 
 export interface IWinners {
   getWinners: (page?: number, limit?: number) => Promise<IGetCars>;
+  getWinner: (id: number) => Promise<Response>;
   createWinner: (winnerCar: ICar) => Promise<Response>;
   updateWinner: (winnerCar: ICar) => Promise<Response>;
   deleteWinner: (id: number) => Promise<Response>;

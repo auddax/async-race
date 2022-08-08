@@ -76,6 +76,10 @@ class Page implements IPage {
     if (target.id !== 'deleteCarButton') return;
     const carId = target.parentElement?.parentElement?.id;
     if (carId) await this.content.body.garage.deleteCar(Number(carId));
+    const checkWinner = await this.content.body.winners.getWinner(Number(carId));
+    if (checkWinner.status === 200) {
+      await this.content.body.winners.deleteWinner(Number(carId));
+    }
     await this.render();
   }
 
