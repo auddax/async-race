@@ -118,7 +118,6 @@ class Page implements IPage {
 
   async raceCars(target: HTMLElement): Promise<ICar | string | null> {
     if (!target.id.includes('raceCarsButton')) return null;
-    console.log('RACE STARTED!');
     const garage = document.querySelectorAll('.car');
     try {
       const winnerCar = await Promise.any(Array.from(garage).map((item) => {
@@ -138,20 +137,24 @@ class Page implements IPage {
     }
   }
 
-  async driveCar(target: Element): Promise<void> {
+  async driveCar(target: HTMLElement): Promise<void> {
     if (!target.id.includes('driveCar')) return;
+    if (target.classList.contains('active')) return;
     const carId = target.parentElement?.parentElement?.id;
     const car = target.parentElement?.querySelector('svg');
     if (!car || !carId) return;
+    target.classList.add('active');
     await this.startEngine(car, carId);
   }
 
   async stopCar(target: HTMLElement): Promise<void> {
     if (!target.id.includes('stopCar')) return;
     const carId = target.parentElement?.parentElement?.id;
+    const carDriveButton = document.getElementById(`driveCar${carId}`) as HTMLInputElement;
     const car = target.parentElement?.querySelector('svg');
     if (!car || !carId || !Object.keys(this.driveRequest).includes(carId)) return;
     await this.engine.controlCarEngine(Number(carId), EngineStatus.STOPPED);
+    carDriveButton.classList.remove('active');
     cancelAnimationFrame(this.driveRequest[carId]);
     resetAnimation(car);
   }
@@ -159,6 +162,7 @@ class Page implements IPage {
   async startEngine(car: HTMLElement | SVGSVGElement, carId: string): Promise<ICar> {
     const responseEngine = await this.engine.controlCarEngine(Number(carId), EngineStatus.STARTED);
     const carElement = document.getElementById(String(carId))?.querySelector('.car__name') as HTMLElement;
+    const carDriveButton = document.getElementById(`driveCar${carId}`) as HTMLInputElement;
     const carName = carElement.innerText;
     const carColor = car.querySelector('path')?.getAttribute('fill') || environment.defaultColor;
     const { velocity, distance } = await responseEngine.json();
@@ -174,8 +178,10 @@ class Page implements IPage {
     if (responseDrive.status === 500) {
       await this.engine.controlCarEngine(Number(carId), EngineStatus.STOPPED);
       cancelAnimationFrame(this.driveRequest[carId]);
+      carDriveButton.classList.remove('active');
       throw new Error('Engine was broken down!');
     }
+    carDriveButton.classList.remove('active');
     return {
       id: carId,
       time: duration,
@@ -191,6 +197,7 @@ class Page implements IPage {
   }
 
   async sortCars(target: HTMLElement): Promise<void> {
+    if (!(target.id === 'winnersNumberWins' || target.id === 'winnersBestTime')) return;
     if (target.id === 'winnersNumberWins') this.sortType = SortType.WINS;
     if (target.id === 'winnersBestTime') this.sortType = SortType.TIME;
     if (this.sortOrder === SortOrder.ASC) {

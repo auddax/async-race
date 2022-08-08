@@ -122,6 +122,13 @@ body {
     width: 30px;
     margin: 0 0.25rem 2rem 0;
 
+    &.active {
+      color: #fca311;
+      background-color: #000000;
+      border: 1px solid #fca311;
+      cursor: auto;  
+    }
+
     &:hover {
       cursor: pointer;
     }
@@ -188,8 +195,8 @@ body {
     background-color: inherit;
     color: #e5e5e5;
     position: relative;
-    left: 15%;
-    top: -78%;
+    left: 14%;
+    top: -79%;
     transition: all 0.6s;
 
     &:hover {

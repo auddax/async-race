@@ -73,5 +73,4 @@ export const checkRadioButton = (target: HTMLElement) => {
   if (!target.classList.contains('button-radio')) return;
   const radioInput = target?.parentElement?.querySelector('.car__radio') as HTMLInputElement;
   if (radioInput) radioInput.checked = !radioInput.checked;
-  console.log(radioInput);
 };
