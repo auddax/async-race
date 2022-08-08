@@ -17,7 +17,10 @@ class Garage extends Loader implements IGarage {
     this.buttonEngine = new Button('button', 'button-engine');
   }
 
-  async getCars(page = 1, limit = 7): Promise<IGetCars> {
+  async getCars(
+    page = environment.initialPage,
+    limit = environment.pageLimit.garage,
+  ): Promise<IGetCars> {
     // Have no idea how to deal with this 'undefined' argument
     const response = await super.getResponse(undefined, { _page: page, _limit: limit });
     return {

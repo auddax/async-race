@@ -1,4 +1,4 @@
-import { IDriveRequest, IWinners } from '../types/interfaces';
+import { ICar, IDriveRequest } from '../types/interfaces';
 
 /* eslint-disable no-param-reassign */
 export const generateRandomColor = ():string => {
@@ -43,13 +43,12 @@ export const closePopup = () => {
   popup.remove();
 };
 
-export const showPopup = (winnerCar: IWinners): void => {
-  const [carName, duration] = Object.entries(winnerCar).flat();
+export const showPopup = (winnerCar: ICar): void => {
   const messageElement = `
     <div class="popup">
       <div class="popup__body">
         <div class="popup__content">
-          ${carName} wins the race with a time of ${(Number(duration) / 1000).toFixed(2)}s !
+          ${winnerCar.name} wins the race with a time of ${(Number(winnerCar.time) / 1000).toFixed(2)}s !
         </div>
       </div>
     </div>

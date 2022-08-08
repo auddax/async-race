@@ -3,21 +3,15 @@ import { EngineStatus, View } from './enums';
 export interface IApp {
   root: HTMLElement;
   page: number;
-  winners: IWinners;
   garagePage: IPage;
   winnersPage: IPage;
   render: (view: View) => void;
-}
-
-export interface IWinners {
-  [index: string]: number;
 }
 
 export interface IPage {
   view: View;
   page: number;
   root: HTMLElement;
-  winners: IWinners;
   header: IPageHeader;
   controls: IPageControls;
   content: IPageContent;
@@ -64,18 +58,25 @@ export interface IContentFooter {
 export interface IContentBody {
   type: string;
   garage: IGarage;
+  winners: IWinners;
   render: (page: number) => Promise<string>;
 }
 
 export interface ICar {
-  name: string;
-  color: string;
-  id: number;
+  [index: string]: string | number;
 }
 
 export interface IGetCars {
   items: Promise<ICar[]>;
   count: string | null;
+}
+
+export interface IWinners {
+  getWinners: (page?: number, limit?: number) => Promise<IGetCars>;
+  createWinner: (winnerCar: ICar) => Promise<Response>;
+  updateWinner: (winnerCar: ICar) => Promise<Response>;
+  deleteWinner: (id: number) => Promise<Response>;
+  render: (page?: number) => void
 }
 
 export interface IGarage {
@@ -89,7 +90,7 @@ export interface IGarage {
 export interface IEngine {
   controlCarEngine: (id: number, status: EngineStatus) => Promise<Response>;
 }
-
+// TODO: join QueryParams and PathVars types
 export interface QueryParams {
   [index: string]: string | number | null;
 }

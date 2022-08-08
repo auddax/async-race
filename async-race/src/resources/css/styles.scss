@@ -1,3 +1,6 @@
+$font-primary: 'Arial', sans-serif;
+$font-secondary: 'Open Sans', sans-serif;
+
 * {
   margin: 0;
   padding: 0;
@@ -19,6 +22,7 @@ body {
   border: none;
   border-radius: 5px;
   color: #14213d;
+  font-family: $font-primary;
   font-size: 0.75rem;
   font-weight: 600;
 
@@ -82,6 +86,7 @@ body {
   margin: 1rem 0;
 
   .content__header {
+    font-family: $font-secondary;
     color: #e5e5e5;
     text-transform: capitalize;
   }
@@ -126,6 +131,7 @@ body {
   }
 
   .car__name {
+    font-family: $font-secondary;
     color: #e5e5e5;
   }
 
@@ -156,7 +162,7 @@ body {
     background-color: rgba(0, 0, 0, 0.85);
     justify-content: center;
     align-items: center;
-    width: 500px;
+    max-width: 600px;
     height: 200px;
   }
 
@@ -165,5 +171,31 @@ body {
     font-size: 1.5rem;
     font-weight: 600;
     color: #fca311;
+  }
+}
+
+.table {
+  color: #e5e5e5;
+  border-collapse: collapse;
+  margin: 1rem 0;
+
+  .table__header {
+    font-size: 1.15rem;
+    font-family: $font-secondary;
+    color: #14213d;
+    background-color: #fca311;
+
+    th {
+      padding: 0.5rem 1rem;
+      margin: 0 0.5rem;
+    }
+  }
+
+  td {
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    font-family: $font-primary;
+    font-size: 1rem;
+    text-align: center;
   }
 }

@@ -23,10 +23,13 @@ class PageContent implements IPageContent {
   }
 
   async render(page: number) {
-    const carsCount = await this.body.garage.getCars();
+    const carsCount = await (await this.body.garage.getCars()).count;
+    const winnersCount = await (await this.body.winners.getWinners()).count;
+    const renderCount = this.view === View.GARAGE ? carsCount : winnersCount;
+
     return (`
       <section class="content">
-        ${this.header.render(carsCount.count || '', page)}
+        ${this.header.render(renderCount || '0', page)}
         ${await this.body.render(page)}
         ${this.footer.render()}
       </section>

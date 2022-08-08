@@ -3,13 +3,13 @@ import PageControls from './pageControls';
 import PageContent from './pageContent';
 import { EngineStatus, View } from '../../types/enums';
 import {
+  ICar,
   IDriveRequest,
   IEngine,
   IPage,
   IPageContent,
   IPageControls,
   IPageHeader,
-  IWinners,
 } from '../../types/interfaces';
 import {
   startAnimation,
@@ -27,8 +27,6 @@ class Page implements IPage {
 
   root: HTMLElement;
 
-  winners: IWinners;
-
   engine: IEngine;
 
   header: IPageHeader;
@@ -39,11 +37,10 @@ class Page implements IPage {
 
   driveRequest: IDriveRequest;
 
-  constructor(view: View, page: number, root: HTMLElement, winners: IWinners) {
+  constructor(view: View, page: number, root: HTMLElement) {
     this.view = view;
     this.page = page;
     this.root = root;
-    this.winners = winners;
     this.engine = new Engine();
     this.header = new PageHeader();
     this.controls = new PageControls();
@@ -102,7 +99,7 @@ class Page implements IPage {
     await this.render();
   }
 
-  async raceCars(target: HTMLElement): Promise<IWinners | string | null> {
+  async raceCars(target: HTMLElement): Promise<ICar | string | null> {
     if (!target.id.includes('raceCarsButton')) return null;
     const garage = document.querySelectorAll('.car');
     try {
@@ -113,7 +110,7 @@ class Page implements IPage {
       }));
       // TODO: Refactor this line
       if (winnerCar) {
-        Object.assign(this.winners, winnerCar);
+        await this.content.body.winners.createWinner(winnerCar);
         showPopup(winnerCar);
       }
       return winnerCar;
@@ -140,10 +137,11 @@ class Page implements IPage {
     cancelAnimationFrame(this.driveRequest[carId]);
   }
 
-  async startEngine(car: HTMLElement | SVGSVGElement, carId: string): Promise<IWinners> {
+  async startEngine(car: HTMLElement | SVGSVGElement, carId: string): Promise<ICar> {
     const responseEngine = await this.engine.controlCarEngine(Number(carId), EngineStatus.STARTED);
     const carElement = document.getElementById(String(carId))?.querySelector('.car__name') as HTMLElement;
     const carName = carElement.innerText;
+    const carColor = car.querySelector('path')?.getAttribute('fill') || environment.defaultColor;
     const { velocity, distance } = await responseEngine.json();
     const duration = distance / velocity;
     startAnimation(
@@ -159,7 +157,12 @@ class Page implements IPage {
       cancelAnimationFrame(this.driveRequest[carId]);
       throw new Error('Engine was broken down!');
     }
-    return { [carName]: duration };
+    return {
+      id: carId,
+      time: duration,
+      name: carName,
+      color: carColor,
+    };
   }
 
   async resetCars(target: HTMLElement): Promise<void> {
