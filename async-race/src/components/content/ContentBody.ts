@@ -1,3 +1,4 @@
+import { SortOrder, SortType } from '../../types/enums';
 import {
   IContentBody,
   IGarage,
@@ -19,10 +20,10 @@ class ContentBody implements IContentBody {
     this.winners = new Winners();
   }
 
-  async render(page: number):Promise<string> {
+  async render(page: number, sortType: SortType, sortOrder: SortOrder):Promise<string> {
     return (`
       <section class=${this.type}>
-        ${this.type === 'garage' ? await this.garage.render(page) : await this.winners.render(page)}
+        ${this.type === 'garage' ? await this.garage.render(page) : await this.winners.render(page, sortType, sortOrder)}
       </section>
     `);
   }

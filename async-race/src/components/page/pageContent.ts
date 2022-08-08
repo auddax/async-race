@@ -1,4 +1,4 @@
-import { View } from '../../types/enums';
+import { SortOrder, SortType, View } from '../../types/enums';
 import {
   IContentBody, IContentFooter, IContentHeader, IPageContent,
 } from '../../types/interfaces';
@@ -22,7 +22,7 @@ class PageContent implements IPageContent {
     this.footer = new ContentFooter();
   }
 
-  async render(page: number) {
+  async render(page: number, sortType: SortType, sortOrder: SortOrder) {
     const carsCount = await (await this.body.garage.getCars()).count;
     const winnersCount = await (await this.body.winners.getWinners()).count;
     const renderCount = this.view === View.GARAGE ? carsCount : winnersCount;
@@ -30,7 +30,7 @@ class PageContent implements IPageContent {
     return (`
       <section class="content">
         ${this.header.render(renderCount || '0', page)}
-        ${await this.body.render(page)}
+        ${await this.body.render(page, sortType, sortOrder)}
         ${this.footer.render()}
       </section>
     `);

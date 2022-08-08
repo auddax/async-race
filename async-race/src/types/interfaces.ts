@@ -1,4 +1,9 @@
-import { EngineStatus, View } from './enums';
+import {
+  EngineStatus,
+  SortOrder,
+  SortType,
+  View,
+} from './enums';
 
 export interface IApp {
   page: number;
@@ -30,7 +35,11 @@ export interface IPageContent {
   view: View;
   header: IContentHeader;
   body: IContentBody;
-  render: (page: number) => Promise<string>;
+  render: (
+    page: number,
+    sortType: SortType,
+    sortOrder: SortOrder
+  ) => Promise<string>;
 }
 
 export interface IDriveRequest {
@@ -57,7 +66,11 @@ export interface IContentBody {
   type: string;
   garage: IGarage;
   winners: IWinners;
-  render: (page: number) => Promise<string>;
+  render: (
+    page: number,
+    sortType: SortType,
+    sortOrder: SortOrder
+  ) => Promise<string>;
 }
 
 export interface ICar {
@@ -70,12 +83,17 @@ export interface IGetCars {
 }
 
 export interface IWinners {
-  getWinners: (page?: number, limit?: number) => Promise<IGetCars>;
+  getWinners: (
+    page?: number,
+    sort?: SortType,
+    order?: SortOrder,
+    limit?: number,
+  ) => Promise<IGetCars>;
   getWinner: (id: number) => Promise<Response>;
   createWinner: (winnerCar: ICar) => Promise<Response>;
   updateWinner: (winnerCar: ICar) => Promise<Response>;
   deleteWinner: (id: number) => Promise<Response>;
-  render: (page?: number) => void
+  render: (page?: number, sort?: SortType, order?: SortOrder) => Promise<string>;
 }
 
 export interface IGarage {
@@ -83,7 +101,7 @@ export interface IGarage {
   createCar: (name: string, color: string) => Promise<Response>;
   updateCar: (id: number, name: string, color: string) => Promise<Response>;
   deleteCar: (id: number) => Promise<Response>;
-  render: (page?: number) => void;
+  render: (page?: number) => Promise<string>;
 }
 
 export interface IEngine {

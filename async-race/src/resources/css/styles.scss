@@ -223,6 +223,11 @@ body {
       padding: 0.5rem 1rem;
       margin: 0 0.5rem;
     }
+
+    #winnersNumberWins,
+    #winnersBestTime {
+      cursor: pointer;
+    }
   }
 
   td {

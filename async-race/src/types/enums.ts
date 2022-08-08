@@ -14,3 +14,14 @@ export enum EngineStatus {
   STOPPED = 'stopped',
   DRIVE = 'drive',
 }
+
+export enum SortOrder {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
+
+export enum SortType {
+  ID = 'id',
+  WINS = 'wins',
+  TIME = 'time',
+}

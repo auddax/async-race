@@ -1,7 +1,12 @@
 import PageHeader from './pageHeader';
 import PageControls from './pageControls';
 import PageContent from './pageContent';
-import { EngineStatus, View } from '../../types/enums';
+import {
+  EngineStatus,
+  SortOrder,
+  SortType,
+  View,
+} from '../../types/enums';
 import {
   ICar,
   IDriveRequest,
@@ -27,6 +32,10 @@ class Page implements IPage {
 
   page: number;
 
+  sortType: SortType;
+
+  sortOrder: SortOrder;
+
   engine: IEngine;
 
   header: IPageHeader;
@@ -40,6 +49,8 @@ class Page implements IPage {
   constructor(view: View, page: number) {
     this.view = view;
     this.page = page;
+    this.sortType = SortType.TIME;
+    this.sortOrder = SortOrder.ASC;
     this.engine = new Engine();
     this.header = new PageHeader();
     this.controls = new PageControls();
@@ -61,6 +72,7 @@ class Page implements IPage {
       this.stopCar(target);
       this.raceCars(target);
       this.resetCars(target);
+      this.sortCars(target);
       checkRadioButton(target);
     });
   }
@@ -178,6 +190,17 @@ class Page implements IPage {
     await this.render();
   }
 
+  async sortCars(target: HTMLElement): Promise<void> {
+    if (target.id === 'winnersNumberWins') this.sortType = SortType.WINS;
+    if (target.id === 'winnersBestTime') this.sortType = SortType.TIME;
+    if (this.sortOrder === SortOrder.ASC) {
+      this.sortOrder = SortOrder.DESC;
+    } else {
+      this.sortOrder = SortOrder.ASC;
+    }
+    await this.render();
+  }
+
   async nextPage(target: HTMLElement): Promise<void> {
     if (target.id !== 'nextPageButton') return;
     const carCount = (await this.content.body.garage.getCars()).count;
@@ -199,7 +222,7 @@ class Page implements IPage {
         ${this.header.render()}
         <main class="container">
           ${this.view === 'garage' ? this.controls.render() : ''}
-          ${await this.content.render(this.page)}
+          ${await this.content.render(this.page, this.sortType, this.sortOrder)}
         </main>
       </div>
     `;
