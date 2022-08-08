@@ -71,7 +71,7 @@ class Garage extends Loader implements IGarage {
       <div class="car" id=${item.id}>
         <div class="car__header">
           <input type="radio" class="car__radio" id="selectCar${item.id}" name="car">
-          <button type="button" class="button">
+          <button type="button" class="button button-radio">
             <label for="selectCar${item.id}" class="button__label">Select</label>
           </button>
           ${this.button.render('Remove', 'deleteCarButton')}

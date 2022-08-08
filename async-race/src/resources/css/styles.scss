@@ -29,6 +29,13 @@ body {
   &:hover {
     cursor: pointer;
   }
+
+  &:active {
+    color: #fca311;
+    background-color: #000000;
+    border: 1px solid #fca311;
+  }
+
   .button__label:hover {
     cursor: pointer;
   }
@@ -122,6 +129,12 @@ body {
 
   .car__radio {
     display: none;
+
+    &:checked ~ .button:first-of-type {
+      color: #fca311;
+      background-color: #000000;
+      border: 1px solid #fca311;
+    }
   }
 
   .car__header {
@@ -164,6 +177,27 @@ body {
     align-items: center;
     max-width: 600px;
     height: 200px;
+    cursor: auto;
+
+   .popup__close {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #e5e5e5;
+    border-radius: 50px;
+    background-color: inherit;
+    color: #e5e5e5;
+    position: relative;
+    left: 15%;
+    top: -78%;
+    transition: all 0.6s;
+
+    &:hover {
+      background-color: #e5e5e5;
+      color: #000000;
+      cursor: pointer;
+    }
+   }
   }
 
   .popup__content {

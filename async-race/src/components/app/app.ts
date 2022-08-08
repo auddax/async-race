@@ -4,8 +4,6 @@ import { View } from '../../types/enums';
 import environment from '../../environment/environment';
 
 class App implements IApp {
-  root: HTMLElement;
-
   page: number;
 
   garagePage: IPage;
@@ -13,14 +11,14 @@ class App implements IApp {
   winnersPage: IPage;
 
   constructor() {
-    this.root = document.getElementById('root') as HTMLElement;
     this.page = environment.initialPage;
-    this.garagePage = new Page(View.GARAGE, this.page, this.root);
-    this.winnersPage = new Page(View.WINNERS, this.page, this.root);
+    this.garagePage = new Page(View.GARAGE, this.page);
+    this.winnersPage = new Page(View.WINNERS, this.page);
   }
 
   listen(): void {
-    this.root.addEventListener('click', async (event) => {
+    const root = document.getElementById('root') as HTMLElement;
+    root.addEventListener('click', async (event) => {
       const target = event.target as HTMLElement;
       if (target.id === 'garagePageButton') this.render(View.GARAGE);
       if (target.id === 'winnersPageButton') this.render(View.WINNERS);
@@ -30,10 +28,8 @@ class App implements IApp {
   async render(view: View): Promise<void> {
     if (this.garagePage.view === view) {
       await this.garagePage.render();
-      this.garagePage.listen();
     } else {
       await this.winnersPage.render();
-      this.winnersPage.listen();
     }
   }
 }

@@ -38,7 +38,13 @@ export const startAnimation = (
   });
 };
 
-export const closePopup = () => {
+export const resetAnimation = (element: HTMLElement | SVGSVGElement): void => {
+  element.style.transform = 'none';
+};
+
+export const closePopup = (event: Event): void => {
+  const target = event.target as HTMLElement;
+  if (target.classList.contains('popup__body')) return;
   const popup = document.querySelector('.popup') as HTMLElement;
   popup.remove();
 };
@@ -50,10 +56,22 @@ export const showPopup = (winnerCar: ICar): void => {
         <div class="popup__content">
           ${winnerCar.name} wins the race with a time of ${(Number(winnerCar.time) / 1000).toFixed(2)}s !
         </div>
+        <div class="popup__close">
+          <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
+            <path d="m12.45 37.65-2.1-2.1L21.9 24 10.35 12.45l2.1-2.1L24 21.9l11.55-11.55 2.1 2.1L26.1 24l11.55 11.55-2.1 2.1L24 26.1Z" fill="currentColor"/>
+          </svg>
+        </div>
       </div>
     </div>
   `;
   document.body.insertAdjacentHTML('beforeend', messageElement);
   const popup = document.querySelector('.popup') as HTMLElement;
   popup?.addEventListener('click', closePopup);
+};
+
+export const checkRadioButton = (target: HTMLElement) => {
+  if (!target.classList.contains('button-radio')) return;
+  const radioInput = target?.parentElement?.querySelector('.car__radio') as HTMLInputElement;
+  if (radioInput) radioInput.checked = !radioInput.checked;
+  console.log(radioInput);
 };

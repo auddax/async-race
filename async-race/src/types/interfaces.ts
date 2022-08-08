@@ -1,7 +1,6 @@
 import { EngineStatus, View } from './enums';
 
 export interface IApp {
-  root: HTMLElement;
   page: number;
   garagePage: IPage;
   winnersPage: IPage;
@@ -11,7 +10,6 @@ export interface IApp {
 export interface IPage {
   view: View;
   page: number;
-  root: HTMLElement;
   header: IPageHeader;
   controls: IPageControls;
   content: IPageContent;

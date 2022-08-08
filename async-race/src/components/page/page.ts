@@ -16,6 +16,8 @@ import {
   generateRandomCarName,
   generateRandomColor,
   showPopup,
+  resetAnimation,
+  checkRadioButton,
 } from '../../utils/utils';
 import environment from '../../environment/environment';
 import Engine from '../garage/engine';
@@ -24,8 +26,6 @@ class Page implements IPage {
   view: View;
 
   page: number;
-
-  root: HTMLElement;
 
   engine: IEngine;
 
@@ -37,10 +37,9 @@ class Page implements IPage {
 
   driveRequest: IDriveRequest;
 
-  constructor(view: View, page: number, root: HTMLElement) {
+  constructor(view: View, page: number) {
     this.view = view;
     this.page = page;
-    this.root = root;
     this.engine = new Engine();
     this.header = new PageHeader();
     this.controls = new PageControls();
@@ -49,7 +48,8 @@ class Page implements IPage {
   }
 
   listen(): void {
-    this.root.addEventListener('click', async (event) => {
+    const root = document.getElementById(this.view) as HTMLElement;
+    root.addEventListener('click', async (event) => {
       const target = event.target as HTMLElement;
       this.createCar(target);
       this.deleteCar(target);
@@ -61,6 +61,7 @@ class Page implements IPage {
       this.stopCar(target);
       this.raceCars(target);
       this.resetCars(target);
+      checkRadioButton(target);
     });
   }
 
@@ -105,6 +106,7 @@ class Page implements IPage {
 
   async raceCars(target: HTMLElement): Promise<ICar | string | null> {
     if (!target.id.includes('raceCarsButton')) return null;
+    console.log('RACE STARTED!');
     const garage = document.querySelectorAll('.car');
     try {
       const winnerCar = await Promise.any(Array.from(garage).map((item) => {
@@ -139,6 +141,7 @@ class Page implements IPage {
     if (!car || !carId || !Object.keys(this.driveRequest).includes(carId)) return;
     await this.engine.controlCarEngine(Number(carId), EngineStatus.STOPPED);
     cancelAnimationFrame(this.driveRequest[carId]);
+    resetAnimation(car);
   }
 
   async startEngine(car: HTMLElement | SVGSVGElement, carId: string): Promise<ICar> {
@@ -190,7 +193,8 @@ class Page implements IPage {
   }
 
   async render(): Promise<void> {
-    this.root.innerHTML = `
+    const root = document.getElementById('root') as HTMLElement;
+    root.innerHTML = `
       <div id="${this.view}">
         ${this.header.render()}
         <main class="container">
@@ -199,6 +203,7 @@ class Page implements IPage {
         </main>
       </div>
     `;
+    this.listen();
   }
 }
 
