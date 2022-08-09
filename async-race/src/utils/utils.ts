@@ -68,30 +68,10 @@ export const showPopup = (winnerCar: ICar): void => {
   popup?.addEventListener('click', closePopup);
 };
 
-export const showPopupError = (message: string): void => {
-  const messageElement = `
-    <div class="popup">
-      <div class="popup__body">
-        <div class="popup__content">
-         Error: ${message} !
-        </div>
-        <div class="popup__close">
-          <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
-            <path d="m12.45 37.65-2.1-2.1L21.9 24 10.35 12.45l2.1-2.1L24 21.9l11.55-11.55 2.1 2.1L26.1 24l11.55 11.55-2.1 2.1L24 26.1Z" fill="currentColor"/>
-          </svg>
-        </div>
-      </div>
-    </div>
-  `;
-  document.body.insertAdjacentHTML('beforeend', messageElement);
-  const popup = document.querySelector('.popup') as HTMLElement;
-  popup?.addEventListener('click', closePopup);
-};
-
 export const checkRadioButton = (event: Event): void => {
-  event.preventDefault();
   const target = event.target as HTMLElement;
   if (!target.classList.contains('button-radio')) return;
+  event.preventDefault();
   const carElement = target?.closest('.car') as HTMLInputElement;
   const radioInput = carElement.querySelector('.car__radio') as HTMLInputElement;
   if (radioInput) radioInput.checked = !radioInput.checked;
