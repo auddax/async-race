@@ -53,7 +53,7 @@ export const showPopup = (winnerCar: ICar): void => {
     <div class="popup">
       <div class="popup__body">
         <div class="popup__content">
-          ${winnerCar.name} wins the race with a time of ${(Number(winnerCar.time) / 1000).toFixed(2)}s !
+          ${winnerCar.name} wins the race with a time of ${winnerCar.time}s !
         </div>
         <div class="popup__close">
           <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">

@@ -182,7 +182,7 @@ class Page implements IPage {
     carDriveButton.classList.remove('active');
     return {
       id: carId,
-      time: duration,
+      time: (duration / 1000).toFixed(2),
       name: carName,
       color: carColor,
     };
