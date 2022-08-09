@@ -118,6 +118,8 @@ class Page implements IPage {
 
   async raceCars(target: HTMLElement): Promise<ICar | string | null> {
     if (!target.id.includes('raceCarsButton')) return null;
+    if (target.classList.contains('active')) return null;
+    target.classList.add('active');
     const garage = document.querySelectorAll('.car');
     try {
       const winnerCar = await Promise.any(Array.from(garage).map((item) => {
@@ -190,6 +192,8 @@ class Page implements IPage {
 
   async resetCars(target: HTMLElement): Promise<void> {
     if (target.id !== 'resetCarsButton') return;
+    const raceCarsButton = document.getElementById('raceCarsButton') as HTMLElement;
+    raceCarsButton.classList.remove('active');
     this.driveRequest = {};
     await this.render();
   }
