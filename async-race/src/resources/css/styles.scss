@@ -161,6 +161,17 @@ body {
   }
 }
 
+.error-message {
+  border: 1px solid #fca311;
+  text-transform: capitalize;
+  padding: 2rem;
+  margin: 1rem 0;
+  border-radius: 5px;
+  text-align: center;
+  color: #e5e5e5;
+  font-family: $font-secondary;
+}
+
 .popup {
   position: fixed;
   display: flex;

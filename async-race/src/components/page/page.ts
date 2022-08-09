@@ -212,8 +212,9 @@ class Page implements IPage {
 
   async nextPage(target: HTMLElement): Promise<void> {
     if (target.id !== 'nextPageButton') return;
-    const carCount = (await this.content.body.garage.getCars()).count;
-    const pageMax = Math.ceil(Number(carCount) / 7);
+    const countResponse = await this.content.body.garage.getCars();
+    const carsCount = typeof countResponse === 'string' ? 0 : countResponse.count;
+    const pageMax = Math.ceil(Number(carsCount) / 7);
     if (this.page + 1 <= pageMax) this.page += 1;
     await this.render();
   }

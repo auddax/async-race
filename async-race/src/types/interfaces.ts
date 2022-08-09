@@ -88,7 +88,7 @@ export interface IWinners {
     sort?: SortType,
     order?: SortOrder,
     limit?: number,
-  ) => Promise<IGetCars>;
+  ) => Promise<IGetCars | string>;
   getWinner: (id: number) => Promise<Response>;
   createWinner: (winnerCar: ICar) => Promise<Response>;
   updateWinner: (winnerCar: ICar) => Promise<Response>;
@@ -97,7 +97,7 @@ export interface IWinners {
 }
 
 export interface IGarage {
-  getCars: (page?: number, limit?: number) => Promise<IGetCars>;
+  getCars: (page?: number, limit?: number) => Promise<IGetCars | string>;
   createCar: (name: string, color: string) => Promise<Response>;
   updateCar: (id: number, name: string, color: string) => Promise<Response>;
   deleteCar: (id: number) => Promise<Response>;
@@ -116,5 +116,9 @@ export interface ILoader {
   base: string;
   path: string;
   makeUrl: (vars?: number, params?: RequestParams) => string;
-  getResponse: (vars?: number, params?: RequestParams, options?: RequestInit) => Promise<Response>;
+  getResponse: (
+    vars?:number,
+    params?:RequestParams,
+    options?: RequestInit
+  ) => Promise<Response>;
 }

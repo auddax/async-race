@@ -23,8 +23,11 @@ class PageContent implements IPageContent {
   }
 
   async render(page: number, sortType: SortType, sortOrder: SortOrder) {
-    const carsCount = await (await this.body.garage.getCars()).count;
-    const winnersCount = await (await this.body.winners.getWinners()).count;
+    const carsCountResponse = await this.body.garage.getCars();
+    const carsCount = typeof carsCountResponse === 'string' ? 0 : carsCountResponse.count;
+
+    const winnersCountResponse = await this.body.winners.getWinners();
+    const winnersCount = typeof winnersCountResponse === 'string' ? 0 : winnersCountResponse.count;
     const renderCount = this.view === View.GARAGE ? carsCount : winnersCount;
 
     return (`

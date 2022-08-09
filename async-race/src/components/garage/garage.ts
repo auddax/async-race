@@ -20,13 +20,22 @@ class Garage extends Loader implements IGarage {
   async getCars(
     page = environment.initialPage,
     limit = environment.pageLimit.garage,
-  ): Promise<IGetCars> {
+  ): Promise<IGetCars | string> {
+    try {
     // Have no idea how to deal with this 'undefined' argument
-    const response = await super.getResponse(undefined, { _page: page, _limit: limit });
-    return {
-      items: response.json(),
-      count: response.headers.get('X-Total-Count'),
-    };
+      const response = await super.getResponse(undefined, { _page: page, _limit: limit });
+      return {
+        items: response.json(),
+        count: response.headers.get('X-Total-Count'),
+      };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      return (`
+        <div class="error-message">
+          <h3>Error: ${errorMessage}!</h3>
+        </div>
+      `);
+    }
   }
 
   async getCar(id: number): Promise<Response> {
@@ -67,7 +76,9 @@ class Garage extends Loader implements IGarage {
   }
 
   async render(page?: number) {
-    return (await (await this.getCars(page)).items).map((item: ICar) => `
+    const response = await this.getCars(page);
+    if (typeof response === 'string') return response;
+    return (await response.items).map((item: ICar) => `
       <div class="car" id=${item.id}>
         <div class="car__header">
           <input type="radio" class="car__radio" id="selectCar${item.id}" name="car">

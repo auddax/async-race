@@ -22,17 +22,26 @@ class Winners extends Loader implements IWinners {
     sort = SortType.TIME,
     order = SortOrder.ASC,
     limit = environment.pageLimit.winners,
-  ): Promise<IGetCars> {
-    const response = await super.getResponse(undefined, {
-      _page: page,
-      _limit: limit,
-      _sort: sort,
-      _order: order,
-    });
-    return {
-      items: response.json(),
-      count: response.headers.get('X-Total-Count'),
-    };
+  ): Promise<IGetCars | string> {
+    try {
+      const response = await super.getResponse(undefined, {
+        _page: page,
+        _limit: limit,
+        _sort: sort,
+        _order: order,
+      });
+      return {
+        items: response.json(),
+        count: response.headers.get('X-Total-Count'),
+      };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      return (`
+        <div class="error-message">
+          <h3>Error: ${errorMessage}!</h3>
+        </div>
+      `);
+    }
   }
 
   async getWinner(id: number): Promise<Response> {
@@ -99,7 +108,9 @@ class Winners extends Loader implements IWinners {
   }
 
   async render(page?: number, sort?: SortType, order?: SortOrder): Promise<string> {
-    const content = ((await (await this.getWinners(page, sort, order)).items).map((item: ICar, index) => `
+    const response = await this.getWinners(page, sort, order);
+    if (typeof response === 'string') return response;
+    const content = ((await response.items).map((item: ICar, index) => `
       <tr>
         <td>${(((page || 1) - 1) * environment.pageLimit.winners) + index + 1}</td>
         <td>
