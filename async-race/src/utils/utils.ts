@@ -77,10 +77,17 @@ export const checkRadioButton = (event: Event): void => {
   const colorInput = document.querySelector('#updateCarColor') as HTMLInputElement;
   const carElement = target?.closest('.car') as HTMLInputElement;
   const radioInput = carElement.querySelector('.car__radio') as HTMLInputElement;
-  const carName = carElement.querySelector('.car__name') as HTMLElement;
-  const carColor = carElement.querySelector('path')?.getAttribute('fill');
+  let carName = carElement.querySelector('.car__name') as HTMLElement;
+  let carColor = carElement.querySelector('path')?.getAttribute('fill');
 
   if (textInput && carName) textInput.value = carName.innerText;
   if (colorInput && carColor) colorInput.value = carColor;
   if (radioInput) radioInput.checked = !radioInput.checked;
+
+  if (!radioInput.checked) {
+    carName = carElement.querySelector('.car__name') as HTMLElement;
+    carColor = carElement.querySelector('path')?.getAttribute('fill');
+    textInput.value = '';
+    colorInput.value = '#000000';
+  }
 };

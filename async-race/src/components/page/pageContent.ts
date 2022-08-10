@@ -2,7 +2,7 @@ import { SortOrder, SortType, View } from '../../types/enums';
 import {
   IContentBody, IContentFooter, IContentHeader, IPageContent,
 } from '../../types/interfaces';
-import ContentBody from '../content/ContentBody';
+import ContentBody from '../content/contentBody';
 import ContentFooter from '../content/contentFooter';
 import ContentHeader from '../content/contentHeader';
 
